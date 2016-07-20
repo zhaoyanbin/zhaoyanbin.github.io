@@ -1,0 +1,392 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Uwsgi+django服务配置 - My Octopress Blog</title>
+  <meta name="author" content="Your Name">
+
+  
+  <meta name="description" content="uwsgi+django的服务配置和关键配置文件说明 1、django目录结构 Proejct_Name djangosite __init__.py
+manage.py
+settings.py
+wsgi.py(uwsgi启动配置)
+urls.py(import每个app的urls.py) &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://zhaoyanbin.github.io/blog/2016/07/20/uwsgi-plus-djangofu-wu-pei-zhi/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="My Octopress Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">My Octopress Blog</a></h1>
+  
+    <h2>A blogging framework for hackers.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="zhaoyanbin.github.io">
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Uwsgi+django服务配置</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2016-07-20T13:51:49+08:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>20</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>1:51 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>uwsgi+django的服务配置和关键配置文件说明</p>
+
+<!--more-->
+
+
+<h1>1、django目录结构</h1>
+
+<ul>
+<li>Proejct_Name
+
+<ul>
+<li>djangosite
+
+<ul>
+<li>__init__.py</li>
+<li>manage.py</li>
+<li>settings.py</li>
+<li>wsgi.py(<strong><em>uwsgi启动配置</em></strong>)</li>
+<li>urls.py(<strong><em>import每个app的urls.py</em></strong>)</li>
+<li>model.py(<strong><em>放置所有app共用model</em></strong>)</li>
+<li>views.py(<strong><em>放置所有app共用view</em></strong>)</li>
+<li>apps/
+
+<ul>
+<li>myapp1
+
+<ul>
+<li>model.py</li>
+<li>views.py</li>
+<li>urls.py</li>
+<li>static/</li>
+</ul>
+</li>
+<li>myapp2</li>
+</ul>
+</li>
+<li>tests/(<strong><em>project级别的测试，针对每个app的测试还要有单独的测试代码</em></strong>)</li>
+<li>static/
+
+<ul>
+<li>themes1/
+
+<ul>
+<li>css/</li>
+<li>js/</li>
+<li>images/</li>
+</ul>
+</li>
+<li>themes2/
+
+<ul>
+<li>css</li>
+<li>js/</li>
+<li>images/</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>templates
+
+<ul>
+<li>base.html</li>
+<li>home.html</li>
+<li>myapp1
+
+<ul>
+<li>&hellip;</li>
+</ul>
+</li>
+<li>myapp2
+
+<ul>
+<li>&hellip;</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>src(<strong><em>src代码库</em></strong>)
+
+<ul>
+<li>third_party(<strong><em>加载第三方模块，为了避免版本冲突，将使用的第三方库或者期望覆盖的库放到这里</em></strong>)
+
+<ul>
+<li>python*.*
+
+<ul>
+<li>site_packages</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>utils</li>
+<li>tools
+
+<ul>
+<li>path_tools.py(<strong><em>这里将third_party的site_packages</em></strong>)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>uwsgi_run
+
+<ul>
+<li>real_run_systemd</li>
+<li>uwsgi.service</li>
+</ul>
+</li>
+<li>uwsgi.xml</li>
+</ul>
+</li>
+</ul>
+
+
+<h1>2、settings.py文件的配置说明</h1>
+
+<blockquote><p>1.在path_tools.py添加{third_party lib path}到sys_path</p></blockquote>
+
+<pre><code>def _libs_path():
+    libs_path = "../third_party/lib/python2.7/site-packages/"
+    libs_path = os.path.abspath(os.path.join(os.path.dirname(__file__),libs_path))
+    sys.path.insert(0, libs_path)
+    return sys.path
+LIBS_PATH = _libs_path()</code></pre>
+
+
+<blockquote><p>2、添加third_party库的引用：</p></blockquote>
+
+<pre><code>from Project_Name.src.tools.path_tools import LIBS_PATH as _</code></pre>
+
+
+<blockquote><p>3、其它设置：</p></blockquote>
+
+<pre><code>BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+ROOT_DIR = os.path.dirname(BASE_DIR)
+SRC_DIR = os.path.join(ROOT_DIR, 'src')
+RUN_DIR = os.path.join(SRC_DIR, 'run')
+LOG_DIR = os.path.join(SRC_DIR, 'logs')
+DB_DIR = os.path.join(SRC_DIR, 'logs')
+DEBUG = True
+TEMPLATE_DEBUG = DEBUG
+......
+# Absolute path to the directory static files should be collected to.
+# Don't put anything in this directory yourself; store your static files
+# in apps' "static/" subdirectories and in STATICFILES_DIRS.
+# Example: "/home/media/media.lawrence.com/static/"
+STATIC_ROOT = os.path.join(RUN_DIR, 'static')
+# URL prefix for static files.
+# Example: "http://media.lawrence.com/static/"
+STATIC_URL = '/static/'
+STATICFILES_DIRS = (
+    # Put strings here, like "/home/html/static" or "C:/www/django/static".
+    # Always use forward slashes, even on Windows.
+    # Don't forget to use absolute paths, not relative paths."
+    os.path.join(BASE_DIR, 'static'),
+)</code></pre>
+
+
+<h1>3、wsgi.py文件的配置说明</h1>
+
+<pre><code>from Project_Name.src.tools.path_tools import LIBS_PATH as _ #加载第三方库路径
+import os
+import sys
+from django.core.wsgi import get_wsgi_application
+DJANGO_LATEST_PATH = '/opt/tiger/ss_lib/django-latest'
+sys.path.insert(0, DJANGO_LATEST_PATH) #加载django路径
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "Project_Name.djangosite.settings") ＃设置setting加载路径
+application = get_wsgi_application()</code></pre>
+
+
+<h1>4、systemd服务配置与启动</h1>
+
+<blockquote><p>1、systemd启动脚本real_run_systemd</p></blockquote>
+
+<pre><code>#! /bin/bash
+ulimit -c 1000000
+ulimit -n 50000
+export DJANGO_SETTINGS_MODULE="djangosite.settings"
+cd /your/path/to/Project #{Project_Name}
+prog_name="{your prog name}"
+echo "`date '+%Y-%m-%d %H:%M:%S'`  `hostname` : $prog_name start" >> /your/log/parent/dir/${prog_name}_svc.log
+exec /your/uwsgi/service/location/uwsgi -x uwsgi.xml  1>/dev/null 2>>/your/error/log/dir/${prog_name}_err.log</code></pre>
+
+
+<blockquote><p>2、systemd服务配置uwsgi.service</p></blockquote>
+
+<pre><code>ExecStart=/your/online/real_run_systemd/dir/real_run_systemd
+ExecReload=/bin/kill -s HUP $MAINPID
+Restart=always
+ExecStop=/bin/kill -s INT $MAINPID
+KillMode=control-group
+KillSignal=INT
+[Install]
+WantedBy=default.target</pre>
+
+
+<p>关于关闭DEBUG模式和systemctl后续补充。</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Your Name</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2016-07-20T13:51:49+08:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>20</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>1:51 pm</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/django/'>django</a>, <a class='category' href='/blog/categories/uwsgi/'>uwsgi</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://zhaoyanbin.github.io/blog/2016/07/20/uwsgi-plus-djangofu-wu-pei-zhi/" data-via="" data-counturl="http://zhaoyanbin.github.io/blog/2016/07/20/uwsgi-plus-djangofu-wu-pei-zhi/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2016/07/13/first-blog/" title="Previous Post: first blog">&laquo; first blog</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2016/07/20/uwsgi-plus-djangofu-wu-pei-zhi/">Uwsgi+django服务配置</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/07/13/first-blog/">First Blog</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2016 - Your Name -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
