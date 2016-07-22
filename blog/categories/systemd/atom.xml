@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Systemd | My Octopress Blog]]></title>
+  <link href="http://zhaoyanbin.github.io/blog/categories/systemd/atom.xml" rel="self"/>
+  <link href="http://zhaoyanbin.github.io/"/>
+  <updated>2016-07-22T14:34:55+08:00</updated>
+  <id>http://zhaoyanbin.github.io/</id>
+  <author>
+    <name><![CDATA[Your Name]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Systemd服务使用说明]]></title>
+    <link href="http://zhaoyanbin.github.io/blog/2016/07/21/systemdfu-wu-shi-yong-shuo-ming/"/>
+    <updated>2016-07-21T10:48:24+08:00</updated>
+    <id>http://zhaoyanbin.github.io/blog/2016/07/21/systemdfu-wu-shi-yong-shuo-ming</id>
+    <content type="html"><![CDATA[<p>systemd服务使用说明</p>
+
+<!--more-->
+
+
+<h1>1.使用systemctl &ndash;user enable 命令启动服务</h1>
+
+<pre><code>systemctl --user enable /your/service/path
+</code></pre>
+
+<p>创建的服务在 ~/.config/</p>
+
+<h1>2.服务控制</h1>
+
+<pre><code>systemctl --user start your.service    #启动服务
+systemctl --user status your.service   #查看服务状态
+systemctl --user stop your.service     #停止服务
+systemctl --user restart your.service  #重启服务
+</code></pre>
+
+<h1>3.删除服务</h1>
+
+<p>首先将服务停止，然后删除软链。</p>
+]]></content>
+  </entry>
+  
+</feed>

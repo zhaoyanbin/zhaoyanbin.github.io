@@ -5,14 +5,16 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Blog Archive - My Octopress Blog</title>
+  <title>Systemd服务使用说明 - My Octopress Blog</title>
   <meta name="author" content="Your Name">
 
   
-  <meta name="description" content="Blog Archive 2016 Systemd服务使用说明
-Jul 21 2016 posted in systemd Uwsgi+django服务配置
-Jul 20 2016 posted in django, uwsgi First Blog
-Jul 13 2016 posted in &hellip;">
+  <meta name="description" content="systemd服务使用说明 1.使用systemctl &ndash;user enable 命令启动服务 1
+systemctl --user enable /your/service/path 创建的服务在 ~/.config/ 2.服务控制 1
+2
+3
+4
+systemctl --user &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -21,7 +23,7 @@ Jul 13 2016 posted in &hellip;">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://zhaoyanbin.github.io/blog/archives/">
+  <link rel="canonical" href="http://zhaoyanbin.github.io/blog/2016/07/21/systemdfu-wu-shi-yong-shuo-ming/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="My Octopress Blog" type="application/atom+xml">
@@ -67,63 +69,97 @@ Jul 13 2016 posted in &hellip;">
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Blog Archive</h1>
+    
+      <h1 class="entry-title">Systemd服务使用说明</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2016-07-21T10:48:24+08:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>21</span><span class='date-suffix'>st</span>, <span class='date-year'>2016</span></span> <span class='time'>10:48 am</span></time>
+        
+      </p>
     
   </header>
-  
-  <div id="blog-archives">
 
 
+<div class="entry-content"><p>systemd服务使用说明</p>
 
-  
-  <h2>2016</h2>
-
-<article>
-  
-<h1><a href="/blog/2016/07/21/systemdfu-wu-shi-yong-shuo-ming/">Systemd服务使用说明</a></h1>
-<time datetime="2016-07-21T10:48:24+08:00" pubdate><span class='month'>Jul</span> <span class='day'>21</span> <span class='year'>2016</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/systemd/'>systemd</a></span>
-</footer>
+<!--more-->
 
 
-</article>
+<h1>1.使用systemctl &ndash;user enable 命令启动服务</h1>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>systemctl --user enable /your/service/path</span></code></pre></td></tr></table></div></figure>
 
 
+<p>创建的服务在 ~/.config/</p>
 
-<article>
-  
-<h1><a href="/blog/2016/07/20/uwsgi-plus-djangofu-wu-pei-zhi/">Uwsgi+django服务配置</a></h1>
-<time datetime="2016-07-20T13:51:49+08:00" pubdate><span class='month'>Jul</span> <span class='day'>20</span> <span class='year'>2016</span></time>
+<h1>2.服务控制</h1>
 
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/django/'>django</a>, <a class='category' href='/blog/categories/uwsgi/'>uwsgi</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2016/07/13/first-blog/">First Blog</a></h1>
-<time datetime="2016-07-13T10:54:45+08:00" pubdate><span class='month'>Jul</span> <span class='day'>13</span> <span class='year'>2016</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/python/'>python</a></span>
-</footer>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>systemctl --user start your.service    #启动服务
+</span><span class='line'>systemctl --user status your.service   #查看服务状态
+</span><span class='line'>systemctl --user stop your.service     #停止服务
+</span><span class='line'>systemctl --user restart your.service  #重启服务</span></code></pre></td></tr></table></div></figure>
 
 
-</article>
+<h1>3.删除服务</h1>
 
+<p>首先将服务停止，然后删除软链。</p>
 </div>
 
+
+  <footer>
+    <p class="meta">
+      
   
+
+<span class="byline author vcard">Posted by <span class="fn">Your Name</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2016-07-21T10:48:24+08:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>21</span><span class='date-suffix'>st</span>, <span class='date-year'>2016</span></span> <span class='time'>10:48 am</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/systemd/'>systemd</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://zhaoyanbin.github.io/blog/2016/07/21/systemdfu-wu-shi-yong-shuo-ming/" data-via="" data-counturl="http://zhaoyanbin.github.io/blog/2016/07/21/systemdfu-wu-shi-yong-shuo-ming/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2016/07/20/uwsgi-plus-djangofu-wu-pei-zhi/" title="Previous Post: uwsgi+django服务配置">&laquo; uwsgi+django服务配置</a>
+      
+      
+    </p>
+  </footer>
 </article>
 
 </div>
