@@ -4,7 +4,7 @@
   <title><![CDATA[Yanbin's Blog]]></title>
   <link href="http://zhaoyanbin.github.io/atom.xml" rel="self"/>
   <link href="http://zhaoyanbin.github.io/"/>
-  <updated>2016-07-22T21:32:31+08:00</updated>
+  <updated>2017-08-04T16:35:04+08:00</updated>
   <id>http://zhaoyanbin.github.io/</id>
   <author>
     <name><![CDATA[Yanbin Zhao]]></name>
@@ -12,6 +12,15 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Test]]></title>
+    <link href="http://zhaoyanbin.github.io/blog/2017/08/04/test/"/>
+    <updated>2017-08-04T16:30:15+08:00</updated>
+    <id>http://zhaoyanbin.github.io/blog/2017/08/04/test</id>
+    <content type="html"><![CDATA[
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Systemd服务使用说明]]></title>
